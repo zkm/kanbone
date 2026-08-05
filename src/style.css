@@ -397,6 +397,38 @@ body {
   resize: vertical;
 }
 
+.tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.modal .tag-input .tag-input-field {
+  flex: 1;
+  min-width: 80px;
+  border: none;
+  border-radius: 0;
+  padding: 2px 0;
+  background: transparent;
+}
+
+.chip.removable {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chip-remove {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;

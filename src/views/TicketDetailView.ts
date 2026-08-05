@@ -6,6 +6,8 @@ import { escapeHtml } from "../lib/escapeHtml";
 import type { Ticket, TicketAttributes } from "../models/Ticket";
 
 const ESCAPE_KEY = "Escape";
+const ENTER_KEY = "Enter";
+const BACKSPACE_KEY = "Backspace";
 
 interface TicketDetailViewOptions extends ViewOptions<Ticket> {
   tickets: Tickets;
@@ -15,6 +17,7 @@ interface TicketDetailViewOptions extends ViewOptions<Ticket> {
 export class TicketDetailView extends View<Ticket> {
   private tickets: Tickets;
   private isNew: boolean;
+  private labels: string[] = [];
 
   constructor(options: TicketDetailViewOptions) {
     super({
@@ -26,6 +29,8 @@ export class TicketDetailView extends View<Ticket> {
         "submit form": "onSubmit",
         "click .cancel": "onCancel",
         "click .delete": "onDelete",
+        "click .chip-remove": "onRemoveLabel",
+        "keydown .tag-input-field": "onLabelInputKeydown",
       },
       ...options,
     });
@@ -41,7 +46,7 @@ export class TicketDetailView extends View<Ticket> {
     const priority = this.model.get("priority") ?? "medium";
     const storyPoints = this.model.get("storyPoints");
     const assignee = this.model.get("assignee") ?? "";
-    const labels = this.model.get("labels") ?? [];
+    this.labels = [...(this.model.get("labels") ?? [])];
 
     el.innerHTML = `
       <div class="modal" role="dialog" aria-modal="true">
@@ -73,7 +78,7 @@ export class TicketDetailView extends View<Ticket> {
             </label>
           </div>
           <label>Labels
-            <input name="labels" value="${escapeHtml(labels.join(", "))}" placeholder="comma, separated" />
+            <div class="tag-input">${this.renderLabelChips()}<input type="text" class="tag-input-field" placeholder="Add label…" /></div>
           </label>
           <div class="modal-actions">
             ${this.isNew ? "" : `<button type="button" class="delete">Delete</button>`}
@@ -107,9 +112,51 @@ export class TicketDetailView extends View<Ticket> {
     this.close();
   }
 
+  private renderLabelChips(): string {
+    return this.labels
+      .map(
+        (label, i) =>
+          `<span class="chip removable">${escapeHtml(label)}<button type="button" class="chip-remove" data-index="${i}" aria-label="Remove ${escapeHtml(label)} label">×</button></span>`,
+      )
+      .join("");
+  }
+
+  /** Re-renders just the chip list + input, preserving focus if the input had it. */
+  private refreshLabelChips(): void {
+    const container = (this.el as HTMLElement).querySelector<HTMLElement>(".tag-input")!;
+    const hadFocus = container.contains(document.activeElement);
+    container.innerHTML = `${this.renderLabelChips()}<input type="text" class="tag-input-field" placeholder="Add label…" />`;
+    if (hadFocus) container.querySelector<HTMLInputElement>(".tag-input-field")!.focus();
+  }
+
+  private addLabel(raw: string): void {
+    const label = raw.trim();
+    if (label && !this.labels.includes(label)) this.labels.push(label);
+    this.refreshLabelChips();
+  }
+
+  private onRemoveLabel(e: MouseEvent): void {
+    const index = Number((e.currentTarget as HTMLElement).dataset.index);
+    this.labels.splice(index, 1);
+    this.refreshLabelChips();
+  }
+
+  private onLabelInputKeydown(e: KeyboardEvent): void {
+    const input = e.target as HTMLInputElement;
+    if (e.key === ENTER_KEY || e.key === ",") {
+      e.preventDefault();
+      this.addLabel(input.value);
+    } else if (e.key === BACKSPACE_KEY && input.value === "" && this.labels.length > 0) {
+      e.preventDefault();
+      this.labels.pop();
+      this.refreshLabelChips();
+    }
+  }
+
   private onSubmit(e: SubmitEvent): void {
     e.preventDefault();
-    const data = new FormData(e.target as HTMLFormElement);
+    const form = e.target as HTMLFormElement;
+    const data = new FormData(form);
     const title = String(data.get("title") ?? "").trim();
     if (!title) return;
 
@@ -121,10 +168,11 @@ export class TicketDetailView extends View<Ticket> {
       .byColumn(projectId, status)
       .filter((t) => t.id !== this.model.id).length;
     const storyPointsRaw = String(data.get("storyPoints") ?? "").trim();
-    const labels = String(data.get("labels") ?? "")
-      .split(",")
-      .map((label) => label.trim())
-      .filter(Boolean);
+    // Commit any label typed but not yet confirmed with Enter/comma.
+    const pendingLabel = form.querySelector<HTMLInputElement>(".tag-input-field")?.value ?? "";
+    if (pendingLabel.trim() && !this.labels.includes(pendingLabel.trim())) {
+      this.labels.push(pendingLabel.trim());
+    }
 
     const attrs: Partial<TicketAttributes> = {
       title,
@@ -133,7 +181,7 @@ export class TicketDetailView extends View<Ticket> {
       priority: String(data.get("priority")) as Priority,
       storyPoints: storyPointsRaw ? Number(storyPointsRaw) : null,
       assignee: String(data.get("assignee") ?? "").trim(),
-      labels,
+      labels: [...this.labels],
       order,
     };
 
