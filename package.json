@@ -1,0 +1,25 @@
+{
+  "name": "kanbone",
+  "version": "1.0.0",
+  "description": "A lightweight scrum/kanban board built with Backbone.js, TypeScript, and Vite.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "backbone": "^1.6.1",
+    "cash-dom": "^8.1.5",
+    "underscore": "^1.13.8"
+  },
+  "devDependencies": {
+    "@types/backbone": "^1.4.23",
+    "@types/underscore": "^1.13.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.0"
+  }
+}
