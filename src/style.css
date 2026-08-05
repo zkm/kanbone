@@ -371,6 +371,7 @@ body {
 
 .modal-row label {
   flex: 1;
+  min-width: 0;
 }
 
 .modal input,
