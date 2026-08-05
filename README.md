@@ -23,10 +23,10 @@ Built as an exercise in how far a "2010-era" library like [Backbone.js](https://
 ## Getting started
 
 ```bash
-npm install
-npm run dev      # start the dev server
-npm run build    # typecheck + production build
-npm run preview  # preview the production build
+yarn install
+yarn dev      # start the dev server
+yarn build    # typecheck + production build
+yarn preview  # preview the production build
 ```
 
 ## Project structure
