@@ -6,6 +6,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "analyze": "tsc -b && vite build --mode analyze",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint .",
@@ -30,6 +31,7 @@
     "@types/underscore": "^1.13.0",
     "@vitest/coverage-v8": "^4.1.10",
     "jsdom": "^30.0.1",
+    "rollup-plugin-visualizer": "^7.0.1",
     "typescript": "^7.0.2",
     "vite": "^8.2.0",
     "vitest": "^4.1.10"
