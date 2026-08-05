@@ -1,5 +1,5 @@
-import { Router } from "backbone";
 import type { RouterOptions } from "backbone";
+import { Router } from "backbone";
 import type { AppView } from "./views/AppView";
 
 export class BoardRouter extends Router {

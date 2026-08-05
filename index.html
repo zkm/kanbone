@@ -2,8 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
+    />
     <title>Kanbone — a lightweight scrum board</title>
+    <script>
+      // Applied before first paint so the theme picked last session doesn't
+      // flash the "system" look for a frame. Kept inline/synchronous and out
+      // of theme.ts since a module script would run too late to avoid FOUC.
+      try {
+        const theme = localStorage.getItem("kanbone:theme");
+        if (theme === "light" || theme === "dark") {
+          document.documentElement.dataset.theme = theme;
+        }
+      } catch {}
+    </script>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>

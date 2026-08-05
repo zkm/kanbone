@@ -1,8 +1,8 @@
-import { View } from "backbone";
 import type { ViewOptions } from "backbone";
-import type { Ticket } from "../models/Ticket";
+import { View } from "backbone";
 import { PRIORITIES } from "../lib/board";
 import { escapeHtml } from "../lib/escapeHtml";
+import type { Ticket } from "../models/Ticket";
 
 /**
  * Same constructor-timing rule as TodoItemView: tagName/className/attributes

@@ -1,9 +1,9 @@
-import { View } from "backbone";
 import type { ViewOptions } from "backbone";
-import type { Ticket, TicketAttributes } from "../models/Ticket";
+import { View } from "backbone";
 import type { Tickets } from "../collections/Tickets";
-import { COLUMNS, PRIORITIES, type TicketStatus, type Priority } from "../lib/board";
+import { COLUMNS, PRIORITIES, type Priority, type TicketStatus } from "../lib/board";
 import { escapeHtml } from "../lib/escapeHtml";
+import type { Ticket, TicketAttributes } from "../models/Ticket";
 
 const ESCAPE_KEY = "Escape";
 
@@ -117,7 +117,9 @@ export class TicketDetailView extends View<Ticket> {
     const projectId = this.model.get("projectId")!;
     // Append to the end of the destination column, whether that's because
     // this is a new ticket or the status changed via the select.
-    const order = this.tickets.byColumn(projectId, status).filter((t) => t.id !== this.model.id).length;
+    const order = this.tickets
+      .byColumn(projectId, status)
+      .filter((t) => t.id !== this.model.id).length;
     const storyPointsRaw = String(data.get("storyPoints") ?? "").trim();
     const labels = String(data.get("labels") ?? "")
       .split(",")

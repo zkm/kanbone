@@ -13,6 +13,7 @@ export class Project extends Model<ProjectAttributes> {
     return { color: "#6d5efc", createdAt: Date.now() };
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: matches Backbone.Sync's own return type
   sync(method: string, model: this, options?: object): any {
     return localStorageSync(method as never, model, options);
   }

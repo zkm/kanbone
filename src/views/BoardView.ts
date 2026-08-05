@@ -1,9 +1,9 @@
-import { View } from "backbone";
 import type { ViewOptions } from "backbone";
-import type { Project } from "../models/Project";
-import { Ticket, type TicketAttributes } from "../models/Ticket";
+import { View } from "backbone";
 import type { Tickets } from "../collections/Tickets";
 import { COLUMNS, type TicketStatus } from "../lib/board";
+import type { Project } from "../models/Project";
+import { Ticket, type TicketAttributes } from "../models/Ticket";
 import { ColumnView } from "./ColumnView";
 import { TicketCardView } from "./TicketCardView";
 import { TicketDetailView } from "./TicketDetailView";

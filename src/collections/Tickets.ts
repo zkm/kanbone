@@ -1,8 +1,8 @@
-import { Collection } from "backbone";
 import type { Model } from "backbone";
-import { Ticket, type TicketAttributes } from "../models/Ticket";
-import { LocalStorageStore, localStorageSync } from "../lib/localStorageSync";
+import { Collection } from "backbone";
 import type { TicketStatus } from "../lib/board";
+import { LocalStorageStore, localStorageSync } from "../lib/localStorageSync";
+import { Ticket, type TicketAttributes } from "../models/Ticket";
 
 export class Tickets extends Collection<Ticket> {
   localStorage = new LocalStorageStore("tickets");
@@ -14,6 +14,7 @@ export class Tickets extends Collection<Ticket> {
     super(models, { model: Ticket as unknown as typeof Model });
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: matches Backbone.Sync's own return type
   sync(method: string, model: this, options?: object): any {
     return localStorageSync(method as never, model as never, options);
   }

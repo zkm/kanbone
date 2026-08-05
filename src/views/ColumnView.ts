@@ -1,5 +1,5 @@
-import { View } from "backbone";
 import type { ViewOptions } from "backbone";
+import { View } from "backbone";
 import type { Tickets } from "../collections/Tickets";
 import { COLUMNS, type TicketStatus } from "../lib/board";
 
@@ -70,7 +70,9 @@ export class ColumnView extends View {
     e.preventDefault();
     const ticketId = e.dataTransfer?.getData("text/plain");
     if (!ticketId) return;
-    const orderedIds = [...this.bodyEl.querySelectorAll<HTMLElement>(".card")].map((card) => card.dataset.id!);
+    const orderedIds = [...this.bodyEl.querySelectorAll<HTMLElement>(".card")].map(
+      (card) => card.dataset.id!,
+    );
     this.tickets.moveTicket(ticketId, this.status, orderedIds);
   }
 

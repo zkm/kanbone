@@ -1,7 +1,7 @@
-import { Collection } from "backbone";
 import type { Model } from "backbone";
-import { Project } from "../models/Project";
+import { Collection } from "backbone";
 import { LocalStorageStore, localStorageSync } from "../lib/localStorageSync";
+import { Project } from "../models/Project";
 
 export class Projects extends Collection<Project> {
   localStorage = new LocalStorageStore("projects");
@@ -12,6 +12,7 @@ export class Projects extends Collection<Project> {
     super(models, { model: Project as unknown as typeof Model });
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: matches Backbone.Sync's own return type
   sync(method: string, model: this, options?: object): any {
     return localStorageSync(method as never, model as never, options);
   }

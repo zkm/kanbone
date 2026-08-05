@@ -1,6 +1,6 @@
 import { Model } from "backbone";
+import type { Priority, TicketStatus } from "../lib/board";
 import { localStorageSync } from "../lib/localStorageSync";
-import type { TicketStatus, Priority } from "../lib/board";
 
 export interface TicketAttributes {
   id: string;
@@ -29,6 +29,7 @@ export class Ticket extends Model<TicketAttributes> {
     };
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: matches Backbone.Sync's own return type
   sync(method: string, model: this, options?: object): any {
     return localStorageSync(method as never, model, options);
   }

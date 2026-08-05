@@ -1,5 +1,5 @@
-import { View } from "backbone";
 import type { ViewOptions } from "backbone";
+import { View } from "backbone";
 import type { Projects } from "../collections/Projects";
 
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;
